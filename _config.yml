@@ -1,0 +1,4 @@
+markdown: rdiscount
+permalink: /:month/:title.html
+
+
