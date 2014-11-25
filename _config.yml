@@ -1,4 +1,14 @@
 markdown: rdiscount
-permalink: /:month/:title.html
+permalink: /:year/:month/:title.html
 
+pygments: true
+safe: true
+
+paginate: 5
+paginate_path: "page:num"
+
+# presonal config
+title: Steven Pan's Blog
+description: Steven Pan's Blog, powered by Jekyll...
+feed: atom.xml
 

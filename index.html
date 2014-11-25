@@ -1,25 +1,26 @@
-﻿---
+---
 layout: default
 title: "Xuewen Pan's Blog - powered by Jekyll & GitPages."
 ---
 
-{% include recommend.html %} 
-
 <!-- Loop output paged posts -->
 {% for post in paginator.posts %}
+<div class="pre">
 <h2>
   <a href="{{ post.url }}">
     {{ post.title }}
   </a> 
   <div class="post-date">
-	<span class="glyphicon glyphicon-time"></span>
 	{{ post.date | date_to_string }}
   </div>
 </h2>
+<!--
 <hr>
-{{ post.excerpt }}
-	<p> <a href="{{ post.url }}"><span >阅读全文 &raquo; </span></a></p>
+	{{ post.excerpt }}
 <hr>
+<p> <a href="{{ post.url }}" style="float:right"><span >阅读全文 &raquo; </span></a></p>
+-->
+</div>
 {% endfor %}
 
 <!-- Pager indicator -->
@@ -27,7 +28,7 @@ title: "Xuewen Pan's Blog - powered by Jekyll & GitPages."
   {% if paginator.previous_page %} {% if paginator.previous_page == 1 %}
   <li class="previous">
     <a href="{{ site.url }}/">
-      &larr; Older
+      &larr; 上一页
     </a>
   </li>
   {% else %}
@@ -39,7 +40,7 @@ title: "Xuewen Pan's Blog - powered by Jekyll & GitPages."
   {% endif %} {% endif %} {% if paginator.next_page %}
   <li class="next">
     <a href="{{ site.url }}/page{{ paginator.next_page }}">
-      Newer &rarr;
+      下一页 &rarr;
     </a>
   </li>
   {% endif %}
