@@ -23,6 +23,7 @@ tags: [Linux,Samba]
 	（“-a”是创建samba用户，“-x”是删除samba用户，“-d”是禁用samba用户帐号，“-e”是启用samba用户帐号）
 	[root@localhost ~]#smbpasswd -a user2 
 	[root@localhost ~]#smbpasswd -a user3 
+
 ###1.3、修改配置文件
 
 	samba配置文件的位置：/etc/samba/smb.conf
@@ -89,6 +90,7 @@ tags: [Linux,Samba]
 	[root@localhost ~]#chgrp ASUS /ASUS ------将/ASUS的属组改为ASUS
 	[root@localhost ~]#chmod 777 /public ------给所有用户分配完全控制
 	权限
+
 配置完成后，还要检查/etc/service文件中以“netbios”开头的记录，正确的文件记录如下所示，如果这些记录前有#或没有这些记录，应手工添加，否则用户无法访问Linux服务器上的共享资源
 
 	netbios-ns      137/tcp                         # NETBIOS Name Service
@@ -100,5 +102,6 @@ tags: [Linux,Samba]
 
 ###1.6、测试
 找一台内网windows客户端，打开“网上邻居 ”，输入samba服务器的IP点击“搜索”
+
 ##参考网址：
 Samba服务器的配置：[http://yangxuejun.blog.51cto.com/623927/180224](http://yangxuejun.blog.51cto.com/623927/180224)
