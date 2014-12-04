@@ -13,7 +13,8 @@ tags: [Linux,Samba]
 	6、测试
 ###1.1、安装RPM包(缺省情况下安装了samba的相关软件包，可以用如下命令查看)
 	[root@localhost ~]#rpm -qa | grep samba
-
+	强制安装：-f       
+	跳过依赖安装：--nodeps
 	samba -----samba服务器程序的所有文件
 	samba-common -----提供了Samba服务器和客户机中都必须使用的公共文件
 	samba-client -----提供了Samba客户机的所有文件
@@ -102,6 +103,21 @@ tags: [Linux,Samba]
 
 ###1.6、测试
 找一台内网windows客户端，打开“网上邻居 ”，输入samba服务器的IP点击“搜索”
+
+##二、linux samba服务启动正常，window无法访问
+	
+	1.首先确定linux和windows的防火墙都关了
+	2.然后确定linux和windows之间的网络是不是通的，可用ping命令检测
+	3.最后用“smbpasswd -a 用户名”命令添加samba用户，就可以在windows中访问了
+
+##三、可以登录samba服务器，但是没有权限访问linux下的共享目录
+	
+	1、确保linux下防火墙关闭或者是开放共享目录权限  iptalbes -F
+	2、确保samba服务器配置文件smb.conf设置没有问题，可网上查阅资料看配置办法
+	3、确保setlinux关闭，可以用setenforce 0命令执行。 默认的，SELinux禁止网络上对Samba服务器上的共享目录进行写操作，即使你在smb.conf中允许了这项操作。
+	这两个命令必须执行啊：
+	   iptables -F
+	   setenforce 0
 
 ##参考网址：
 Samba服务器的配置：[http://yangxuejun.blog.51cto.com/623927/180224](http://yangxuejun.blog.51cto.com/623927/180224)
