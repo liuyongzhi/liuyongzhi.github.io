@@ -4,6 +4,7 @@ category: "Spring MVC"
 title:  "Spring MVC Controller 单元测试 - pairwinter"
 tags: [Spring MVC,Controller]
 ---
+**注意：只支持spring3.2以上的版本**
 ##一、简介
 Controller层的单元测试可以使得应用的可靠性得到提升，虽然这使得开发的时间有所增加，有得必失，这里我认为得到的比失去的多很多。
 	
@@ -75,43 +76,60 @@ Spring mvc是对Servlet的包装，使其能够结构化，流程化。
 
 在加上其他的一点代码就可以完成一个Controller的单元测试，下面是一个例子，更多例子请参考showcase中的内容。
 	
-	package pairwinter.spring.mvc.controller.test;
-
-	import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-	import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-	import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-	import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
+	package cn.gyyx.core.demo;
+	
+	import javax.servlet.http.Cookie;
+	
 	import org.junit.Before;
 	import org.junit.Test;
 	import org.junit.runner.RunWith;
-	import org.springframework.samples.mvc.AbstractContextControllerTests;
+	import org.springframework.beans.factory.annotation.Autowired;
+	import org.springframework.test.context.ContextConfiguration;
 	import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+	import org.springframework.test.context.web.WebAppConfiguration;
 	import org.springframework.test.web.servlet.MockMvc;
-
-	@RunWith(SpringJUnit4ClassRunner.class)
+	import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+	import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+	import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+	import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+	import org.springframework.web.context.WebApplicationContext;
+	
+	@RunWith(SpringJUnit4ClassRunner.class)  
 	@WebAppConfiguration
-	@ContextConfiguration({
-		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
-		“classpath*: springxml/**.xml”
-	})
+	@ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml" })
+	public class UserControllerTest {
 	
-	public class ControllerTests{
-	
-		@Autowired
-		private WebApplicationContext wac;
-	
-		private MockMvc mockMvc;
+		private MockMvc mockMvc = null;
+		@Autowired  
+	    private WebApplicationContext webApplicationContext;
 		
 		@Before
-		public void setup() throws Exception {
-			this.mockMvc = webAppContextSetup(this.wac).build();
+		public void init() {
+			mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 		}
-		
+	
 		@Test
-		
-		public void controllerExceptionHandler() throws Exception {
-			this.mockMvc.perform(get("/test"))
-			.andExpect(status().isOk());
+		public void getUserInfoTest() {
+			try {
+				//测试sessionId在cookie里存在
+				String sessionId = "user1";
+				MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+						.post("/getUserInfo").cookie(
+								new Cookie("sessionId", sessionId));
+				mockMvc.perform(requestBuilder)
+						.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/views/user.jsp"))
+						.andExpect(
+								MockMvcResultMatchers.model().attributeExists("userModel")).andReturn();
+				
+				//测试sessionId在cookie里不存在
+				MockHttpServletRequestBuilder requestBuilder1 = MockMvcRequestBuilders
+						.post("/getUserInfo");
+				mockMvc.perform(requestBuilder1)
+						.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/views/login.jsp")).andReturn();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+		
+		
 	}
